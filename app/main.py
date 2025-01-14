@@ -12,7 +12,7 @@ async def life_span(app: FastAPI):
     yield
     print("Ending Application")
 
-version = "0.0.1"
+version = "v1"
 
 app = FastAPI(
     title="Event-Ticketing",
@@ -21,7 +21,7 @@ app = FastAPI(
     version=version
     )
 
-app.include_router(auth.router, prefix="/auth", tags=["Authentication"])
-app.include_router(user.router, prefix="/users", tags=["Users"])
-app.include_router(event.router, prefix="/auth", tags=["Events"])
-app.include_router(organization.router, prefix="/users", tags=["Organization"])
+app.include_router(auth.router, prefix=f"/auth/{version}", tags=["Authentication"])
+app.include_router(user.router, prefix=f"/users/{version}", tags=["Users"])
+app.include_router(event.router, prefix=f"/event/{version}", tags=["Events"])
+app.include_router(organization.router, prefix=f"/users/{version}", tags=["Organization"])

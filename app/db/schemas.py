@@ -1,20 +1,18 @@
-from pydantic import BaseModel, EmailStr, ValidationError, constr
+from pydantic import BaseModel, EmailStr, ValidationError
+from typing import Optional
 
-
-
-class LoginScheme(BaseModel):
-    email: EmailStr
-    password: str
-    model_config = {'extra':'forbid'}
-
+class UpdateUserRequest(BaseModel):
+    name: Optional[str] = None
+    email: Optional[EmailStr] = None
+    password: Optional[str] = None
+    image_url: Optional[str] = None
 
 class SignUpScheme(BaseModel):
     fistname: str
     lastname: str
     email: EmailStr
-    password:str =  constr(min_length=8)
+    password:str
     model_config = {'extra':'forbid'}
-
 
 class CreateOrganizationScheme(BaseModel):
     name: str
@@ -22,11 +20,15 @@ class CreateOrganizationScheme(BaseModel):
     description: str | None
     model_config = {'extra':'forbid'}
 
-try:
-    LoginScheme()
-except ValidationError as exc:
-    print(repr(exc.errors()[0]['type']))
-    
+class LoginRequest(BaseModel):
+    email: EmailStr
+    password: str
+    model_config = {'extra':'forbid'}
+
+class TokenResponse(BaseModel):
+    access_token: str
+    token_type: str = "bearer"
+  
 
 try:
     SignUpScheme()
