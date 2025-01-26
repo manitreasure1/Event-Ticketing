@@ -1,15 +1,18 @@
 from sqlmodel import SQLModel, Field, Relationship
 from typing import Optional, List
 from datetime import datetime
-from pydantic import EmailStr, ValidationError
+from pydantic import EmailStr
 
 
 class UserDb(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
+    firstname: str
+    lastname: str
     username: str = Field(index=True)
     image_url: Optional[str] = None
     email: EmailStr
-    hashed_password: str
+    role: str = Field(default='user')
+    hashed_password: str = Field(exclude=True)
     is_active: bool = Field(default=True)
     created_at: datetime = Field(default_factory=datetime.now)
     last_login: Optional[datetime] = None
@@ -80,12 +83,3 @@ class Ticket(SQLModel, table=True):
 
 
 
-try:
-    UserDb()
-    Event()
-    Organization()
-    Ticket()
-    EventAttendance()
-    UserOrganization()
-except ValidationError as exc:
-    print(repr(exc.errors()[0]['type']))

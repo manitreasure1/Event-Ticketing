@@ -1,5 +1,6 @@
-from pydantic import BaseModel, EmailStr, ValidationError
+from pydantic import BaseModel, EmailStr
 from typing import Optional
+
 
 class UpdateUserRequest(BaseModel):
     name: Optional[str] = None
@@ -8,7 +9,7 @@ class UpdateUserRequest(BaseModel):
     image_url: Optional[str] = None
 
 class SignUpScheme(BaseModel):
-    fistname: str
+    firstname: str
     lastname: str
     email: EmailStr
     password:str
@@ -30,8 +31,5 @@ class TokenResponse(BaseModel):
     token_type: str = "bearer"
   
 
-try:
-    SignUpScheme()
-except ValidationError as exc:
-    print(repr(exc.errors()[0]['type']))
+
     
