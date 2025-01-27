@@ -3,10 +3,10 @@ from fastapi import Depends, Request, status
 from fastapi.security.http import HTTPAuthorizationCredentials
 from fastapi.security import HTTPBearer
 from fastapi.exceptions import HTTPException
-from services.user_service import UserService
-from db.sessions import get_session
-from db.models import UserDb
-from services.auth_service import AuthService
+from app.services.user_service import UserService
+from app.db.sessions import get_session
+from app.db.models import UserDb
+from app.services.auth_service import AuthService
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 

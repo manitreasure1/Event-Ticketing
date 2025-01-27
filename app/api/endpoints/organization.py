@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Form
 from typing import Annotated
-from db.schemas import CreateOrganizationScheme
+from app.db.schemas import CreateOrganizationScheme
 
 router = APIRouter()
 

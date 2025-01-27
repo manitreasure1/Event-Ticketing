@@ -1,6 +1,6 @@
 from sqlmodel.ext.asyncio.session import AsyncSession
 from sqlmodel import select, col
-from db.models import UserDb
+from app.db.models import UserDb
 
 class UserService:
     async def get_user_by_email(self, user_email: str, session: AsyncSession):

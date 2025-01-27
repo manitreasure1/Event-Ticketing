@@ -1,8 +1,7 @@
 from fastapi import APIRouter, UploadFile, File, Depends, Form
 from typing import Annotated
 from ..dependencies import get_current_user
-from db.schemas import UpdateUserRequest
-
+from app.db.schemas import UpdateUserRequest
 
 
 router = APIRouter()

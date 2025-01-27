@@ -1,8 +1,8 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from sqlmodel import select
-from db.models import Organization, UserDb, Event
+from app.db.models import Organization, UserDb, Event
 from sqlmodel.ext.asyncio.session import AsyncSession
-
+from app.db.sessions import get_session
 
 router = APIRouter()
 
@@ -12,7 +12,7 @@ async def admin_dashboard():
     pass
 
 @router.get("/users/")
-async def get_users(session: AsyncSession):
+async def get_users(session: AsyncSession = Depends(get_session)):
     statement = select(UserDb)
     result = await session.exec(statement)
     users = result.all()
@@ -28,7 +28,7 @@ async def block_user(user_id):
 
 
 @router.get("/organizations")
-async def get_organizations(session: AsyncSession):
+async def get_organizations(session: AsyncSession = Depends(get_session)):
     statement = select(Organization)
     result = await session.exec(statement)
     organization = result.all()
@@ -36,7 +36,7 @@ async def get_organizations(session: AsyncSession):
 
 
 @router.get("/events")
-async def get_events(session: AsyncSession):
+async def get_events(session: AsyncSession = Depends(get_session)): 
     statement = select(Event)
     result = await session.exec(statement)
     events =result.all()

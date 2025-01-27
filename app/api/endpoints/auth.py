@@ -1,14 +1,14 @@
 from tkinter import N
 from fastapi import APIRouter, Form, Depends, status, HTTPException
 from typing import Annotated
-from db.models import UserDb
-from services.user_service import UserService
-from services.auth_service import AuthService
-from db.schemas import SignUpScheme, LoginRequest
+from app.db.models import UserDb
+from app.services.user_service import UserService
+from app.services.auth_service import AuthService
+from app.db.schemas import SignUpScheme, LoginRequest
 from sqlmodel.ext.asyncio.session import AsyncSession
-from db.sessions import get_session
+from app.db.sessions import get_session
 from fastapi.responses import JSONResponse
-from api.dependencies import RefreshTokenBearer
+from app.api.dependencies import RefreshTokenBearer
 from datetime import datetime
 
 

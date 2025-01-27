@@ -1,8 +1,9 @@
 from fastapi import Depends, FastAPI
-from api.endpoints import auth, user, organization, event, admin
+from app.api.endpoints import auth, user, organization, event, admin
 from contextlib import asynccontextmanager
-from db.sessions import init_db, get_session
-from api.dependencies import AccessTokenBearer, RoleChecker
+from app.db.sessions import init_db
+from app.api.dependencies import AccessTokenBearer, RoleChecker
+
 
 access_token_bearer = AccessTokenBearer()
 role_checker = RoleChecker(['admin'])
@@ -27,4 +28,4 @@ app.include_router(auth.router, prefix=f"/auth/{version}", tags=["Authentication
 app.include_router(user.router, prefix=f"/users/{version}", tags=["Users"])
 app.include_router(event.router, prefix=f"/event/{version}", tags=["Events"])
 app.include_router(organization.router, prefix=f"/users/{version}", tags=["Organization"])
-app.include_router(admin.router, prefix=f"/admin/{version}", tags=["Admin"], dependencies=[Depends(access_token_bearer), Depends(role_checker), Depends(get_session)])
+app.include_router(admin.router, prefix=f"/admin/{version}", tags=["Admin"], dependencies=[Depends(access_token_bearer), Depends(role_checker)])
