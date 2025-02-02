@@ -3,36 +3,54 @@ from fastapi import Depends, Request, status
 from fastapi.security.http import HTTPAuthorizationCredentials
 from fastapi.security import HTTPBearer
 from fastapi.exceptions import HTTPException
-from app.services.user_service import UserService
-from app.db.sessions import get_session
-from app.db.models import UserDb
-from app.services.auth_service import AuthService
+from services.user_service import UserService
+from db.sessions import get_session
+from db.models import UserDb
+from services.auth_service import AuthService
 from sqlmodel.ext.asyncio.session import AsyncSession
+import logging
 
+
+logger = logging.getLogger(__name__)
 
 auth_service = AuthService()
 user_service = UserService()
-
 
 class TokenBearer(HTTPBearer):
     def __init__(self, auto_error: bool = True):
         super().__init__(auto_error=auto_error)
     
     async def __call__(self, request: Request) -> HTTPAuthorizationCredentials | dict:
-        creds = await super().__call__(request)
-        token_data = auth_service.decode_token(token=creds.credentials)
+        try:
+          
+            creds = await super().__call__(request)
+            token_data = auth_service.decode_token(token=creds.credentials)
 
-        if not self.verify_token(creds.credentials):
-            raise HTTPException(status.HTTP_403_FORBIDDEN, detail="Invalid or Expired token")
+            if not self.verify_token(creds.credentials):
+                raise HTTPException(status.HTTP_403_FORBIDDEN, detail="Invalid or Expired token")
 
-        self.verify_token_data(token_data)
-        return token_data
+            self.verify_token_data(token_data)
+            return token_data
+        except ValueError as e:
+            logger.error(f"Token Error: {e}")
+            raise HTTPException(status.HTTP_401_UNAUTHORIZED, detail=str(e))
+        except Exception as e:
+            logger.exception("Unexpected error while validating token.")
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="An unexpected error occurred while processing the token.",
+            )
+
 
     def verify_token(self, token: str) -> bool:
         try:
             token_data = auth_service.decode_token(token)
             return bool(token_data)
-        except Exception:  
+        except ValueError as e:
+            logger.error(f"Token verification failed: {e}")
+            return False
+        except Exception as e:  
+            logger.error(f"Unexpected error during token verification: {e}")
             return False
     
     def verify_token_data(self, token_data: dict) -> None:

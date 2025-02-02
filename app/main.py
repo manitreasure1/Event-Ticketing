@@ -1,9 +1,9 @@
 from fastapi import Depends, FastAPI
-from app.api.endpoints import auth, user, organization, event, admin
+from api.endpoints import auth, user, organization, event, admin
 from contextlib import asynccontextmanager
-from app.db.sessions import init_db
-from app.api.dependencies import AccessTokenBearer, RoleChecker
-
+from db.sessions import init_db
+from api.dependencies import AccessTokenBearer, RoleChecker
+from typing import Final
 
 access_token_bearer = AccessTokenBearer()
 role_checker = RoleChecker(['admin'])
@@ -15,17 +15,17 @@ async def life_span(app: FastAPI):
     yield
     print("Ending Application")
 
-version = "v1"
+VERSION: Final = "v1"
 
 app = FastAPI(
     title="Event-Ticketing",
     description="Sports Events Ticketing WebApp",
     lifespan=life_span,
-    version=version
+    version=VERSION
     )
 
-app.include_router(auth.router, prefix=f"/auth/{version}", tags=["Authentication"])
-app.include_router(user.router, prefix=f"/users/{version}", tags=["Users"])
-app.include_router(event.router, prefix=f"/event/{version}", tags=["Events"])
-app.include_router(organization.router, prefix=f"/users/{version}", tags=["Organization"])
-app.include_router(admin.router, prefix=f"/admin/{version}", tags=["Admin"], dependencies=[Depends(access_token_bearer), Depends(role_checker)])
+app.include_router(auth.router, prefix=f"/auth/{VERSION}", tags=["Authentication"])
+app.include_router(user.router, prefix=f"/users/{VERSION}", tags=["Users"])
+app.include_router(event.router, prefix=f"/event/{VERSION}", tags=["Events"])
+app.include_router(organization.router, prefix=f"/organization/{VERSION}", tags=["Organization"])
+app.include_router(admin.router, prefix=f"/admin/{VERSION}", tags=["Admin"], dependencies=[Depends(access_token_bearer), Depends(role_checker)])

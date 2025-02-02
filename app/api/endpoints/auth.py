@@ -1,14 +1,14 @@
 from tkinter import N
 from fastapi import APIRouter, Form, Depends, status, HTTPException
 from typing import Annotated
-from app.db.models import UserDb
-from app.services.user_service import UserService
-from app.services.auth_service import AuthService
-from app.db.schemas import SignUpScheme, LoginRequest
+from db.models import UserDb
+from services.user_service import UserService
+from services.auth_service import AuthService
+from db.schemas import SignUpScheme, LoginRequest
 from sqlmodel.ext.asyncio.session import AsyncSession
-from app.db.sessions import get_session
+from db.sessions import get_session
 from fastapi.responses import JSONResponse
-from app.api.dependencies import RefreshTokenBearer
+from api.dependencies import RefreshTokenBearer
 from datetime import datetime
 
 
@@ -27,9 +27,7 @@ async def login(*, data: Annotated[LoginRequest, Form()], session: AsyncSession 
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, detail="Invalid email or password")
     if not auth_services.verify_password(res.password, result.hashed_password):
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, detail="Invalid email or password")
-    
     token_data = {"sub": res.email, "user_id": result.id, "role": result.role}
-
     access_token = auth_services.create_access_token(user_data=token_data)
     refresh_token = auth_services.create_refresh_token(user_data=token_data)
     return JSONResponse(content={
@@ -41,6 +39,7 @@ async def login(*, data: Annotated[LoginRequest, Form()], session: AsyncSession 
                                 "id": result.id
                             }
                          })
+
 
 @router.post("/register/", status_code=status.HTTP_201_CREATED)
 async def sign_up(*, data: Annotated[SignUpScheme, Form()], session: AsyncSession = Depends(get_session)):
@@ -55,7 +54,6 @@ async def sign_up(*, data: Annotated[SignUpScheme, Form()], session: AsyncSessio
         username = user_data.email.split("@")[0],
         email=user_data.email,
         hashed_password=password
-
     )
     session.add(new_user)
     await session.commit()
@@ -73,11 +71,10 @@ async def get_new_access_token(token_details: dict = Depends(refresh_token)):
     return HTTPException(status.HTTP_400_BAD_REQUEST, detail="invalid or expire token")
 
 
+#  todo
 @router.delete("/logout/")
 async def logout():
     pass
 
 
-@router.post("/register/organization/")
-async def register_organization():
-    pass
+

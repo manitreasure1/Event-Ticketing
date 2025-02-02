@@ -2,7 +2,7 @@ from sqlmodel import SQLModel
 from sqlalchemy.ext.asyncio import create_async_engine
 from sqlmodel.ext.asyncio.session import AsyncSession
 from sqlalchemy.orm import sessionmaker
-from app.core.config import settings
+from core.config import settings
 from typing import AsyncGenerator
 
 engine = create_async_engine(settings.DATABASE_URL, echo=True)

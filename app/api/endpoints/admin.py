@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends
 from sqlmodel import select
-from app.db.models import Organization, UserDb, Event
+from db.models import Organization, UserDb, Event
 from sqlmodel.ext.asyncio.session import AsyncSession
-from app.db.sessions import get_session
+from db.sessions import get_session
 
 router = APIRouter()
 
