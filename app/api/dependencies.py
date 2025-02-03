@@ -1,3 +1,4 @@
+
 from typing import Any
 from fastapi import Depends, Request, status
 from fastapi.security.http import HTTPAuthorizationCredentials
@@ -6,14 +7,14 @@ from fastapi.exceptions import HTTPException
 from services.user_service import UserService
 from db.sessions import get_session
 from db.models import UserDb
-from services.auth_service import AuthService
+from core.utils import Utils
 from sqlmodel.ext.asyncio.session import AsyncSession
 import logging
 
 
 logger = logging.getLogger(__name__)
 
-auth_service = AuthService()
+utils = Utils()
 user_service = UserService()
 
 class TokenBearer(HTTPBearer):
@@ -22,13 +23,10 @@ class TokenBearer(HTTPBearer):
     
     async def __call__(self, request: Request) -> HTTPAuthorizationCredentials | dict:
         try:
-          
             creds = await super().__call__(request)
-            token_data = auth_service.decode_token(token=creds.credentials)
-
-            if not self.verify_token(creds.credentials):
+            token_data = utils.decode_token(token=creds.credentials) # type: ignore
+            if not self.verify_token(creds.credentials): # type: ignore
                 raise HTTPException(status.HTTP_403_FORBIDDEN, detail="Invalid or Expired token")
-
             self.verify_token_data(token_data)
             return token_data
         except ValueError as e:
@@ -44,7 +42,7 @@ class TokenBearer(HTTPBearer):
 
     def verify_token(self, token: str) -> bool:
         try:
-            token_data = auth_service.decode_token(token)
+            token_data = utils.decode_token(token)
             return bool(token_data)
         except ValueError as e:
             logger.error(f"Token verification failed: {e}")
@@ -74,7 +72,11 @@ async def get_current_user(
         session: AsyncSession = Depends(get_session)
         ):
     user_email = user_details.get('sub', None)
+    if not user_email:
+        raise HTTPException(status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
     user = await user_service.get_user_by_email(user_email=user_email, session=session)
+    if not user.is_active: # type: ignore
+        raise HTTPException(status.HTTP_403_FORBIDDEN, detail="Your account is inactive. Contact support.")
     return user 
 
 
@@ -85,5 +87,5 @@ class RoleChecker:
     def __call__(self, user_role:UserDb = Depends(get_current_user)) -> Any:
         if  user_role.role in self.allowed_roles:
             return True 
-        raise HTTPException(status.HTTP_403_FORBIDDEN, detail="You are not permitted to use this route!")
+        raise HTTPException(status.HTTP_403_FORBIDDEN, detail="You are not permitted !")
                  

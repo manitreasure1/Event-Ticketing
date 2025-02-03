@@ -1,50 +1,60 @@
+from sqlmodel.ext.asyncio.session import AsyncSession
+from db.schemas import LoginRequest, SignUpScheme
+from services.user_service import UserService
+from fastapi import HTTPException, status
+from core.utils import Utils
+from fastapi.responses import JSONResponse
+from db.models import UserDb
+from datetime import datetime
 
-from passlib.context import CryptContext
-from datetime import datetime, timedelta
-import jwt
-from core.config import settings
 
-pwd_context = CryptContext(schemes=["bcrypt"])
+user_service = UserService()
+utils = Utils()
 
 
 class AuthService:
-    def __init__(self) -> None:
-        self.secret_key = settings.SECRET_KEY
-        self.algorithm = settings.ALGORITHM
-        self.access_token_expire_hours = settings.ACCESS_TOKEN_EXPIRE_HOURS
-        self.refresh_token_expire_days = settings.REFRSH_TOKEN_EXPIRE_DAYS
+    async def sign_up(self, data: SignUpScheme, session: AsyncSession):
+        existing_user = await user_service.existing_user(data.email, session)
+        if existing_user:
+            return HTTPException(status.HTTP_403_FORBIDDEN, detail="Email already registered")
+        password= utils.hash_password(data.password)
+        new_user = UserDb(
+            firstname=data.firstname,
+            lastname=data.lastname,
+            username =data.email.split("@")[0],
+            email=data.email,
+            hashed_password=password
+        )
+        session.add(new_user)
+        await session.commit()
+        await session.refresh(new_user)
+        return {"message": "User created successfully", "user_id": new_user.id}
 
-    def hash_password(self, password: str) -> str:
-        return pwd_context.hash(password)
 
-    def verify_password(self, plain_password: str, hashed_password: str) -> bool:
-        return pwd_context.verify(plain_password, hashed_password)
-
-    def create_access_token(self, user_data: dict) -> str:
-        to_encode = user_data.copy()
-        expire = datetime.now() + timedelta(hours=self.access_token_expire_hours)
-        to_encode.update({"exp": expire, "refresh": False})
-        encoded_jwt = jwt.encode(to_encode, self.secret_key, algorithm=self.algorithm)
-        return encoded_jwt
+    async def login(self, data: LoginRequest, session: AsyncSession ):
+        result = await user_service.get_user_by_email(data.email, session)
+        if result is None:
+            raise HTTPException(status.HTTP_401_UNAUTHORIZED, detail="Invalid email or password")
+        if not utils.verify_password(data.password, result.hashed_password):
+            raise HTTPException(status.HTTP_401_UNAUTHORIZED, detail="Invalid email or password")
+        token_data = {"sub": data.email, "user_id": result.id, "role": result.role}
+        access_token = utils.create_access_token(user_data=token_data)
+        refresh_token = utils.create_refresh_token(user_data=token_data)
+        return JSONResponse(content={
+                            "message": "Login successfully",
+                            "access_token": access_token,
+                            "refresh_token":refresh_token, 
+                            "user":{
+                                "email": result.email,
+                                "id": result.id
+                            }
+                         })
     
-
-    def create_refresh_token(self, user_data: dict) -> str:
-        to_encode = user_data.copy()
-        expire = datetime.now() + timedelta(days=self.refresh_token_expire_days)
-        to_encode.update({"exp": expire, "refresh": True})
-        encoded_jwt = jwt.encode(to_encode, self.secret_key, algorithm=self.algorithm)
-        return encoded_jwt
-
-
-    def decode_token(self, token: str) -> dict:
-        try:
-            payload = jwt.decode(jwt=token, key=self.secret_key, algorithms=[self.algorithm])
-            return payload
-        except jwt.ExpiredSignatureError:
-            raise ValueError("Token has expired. Please login again.") 
-        except jwt.InvalidTokenError:
-            raise ValueError("Invalid token")
-        
     
+    async def get_new_access_token(self, token_details: dict):   
+        expire_timestamp = token_details.get('exp', False)
+        if datetime.fromtimestamp(expire_timestamp) > datetime.now():
+            new_access_token = utils.create_access_token(user_data=token_details)
+            return JSONResponse( content={"access_token": new_access_token})
 
-
+        return HTTPException(status.HTTP_400_BAD_REQUEST, detail="invalid or expire token")

@@ -1,21 +1,24 @@
 from fastapi import APIRouter, Depends
 from db.sessions import get_session
 from sqlmodel.ext.asyncio.session import AsyncSession
-#  ///  from db.models import Event, EventAttendance, UserDb
 from services.event_service import EventService
+
 
 router = APIRouter()
 event_service = EventService()
+
 
 @router.get("/")
 async def get_events(session: AsyncSession = Depends(get_session)):
     events = await event_service.get_events(session)
     return events
 
+
 @router.get("/{event_id}")
 async def get_event(event_id: int, session: AsyncSession = Depends(get_session)):
     event = await event_service.get_event(event_id, session)
     return event
+
 
 @router.delete("/{event_id}")
 async def remove_event(event_id: int, session: AsyncSession = Depends(get_session)):

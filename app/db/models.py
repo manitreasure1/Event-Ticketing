@@ -30,8 +30,7 @@ class Organization(SQLModel, table=True):
     email: EmailStr
     description: Optional[str]
     created_by: Optional[int] = Field(foreign_key="userdb.id", ondelete='CASCADE')
-
-    members: List["UserOrganization"] = Relationship(back_populates="organization", cascade_delete=True)
+    
     events: List["Event"] = Relationship(back_populates="organizer", cascade_delete=True)
 
 
@@ -40,7 +39,7 @@ class UserOrganization(SQLModel, table=True):
     organization_id: int = Field(foreign_key="organization.id", primary_key=True)
 
     user: "UserDb" = Relationship(back_populates="organizations")
-    organization: "Organization" = Relationship(back_populates="members")
+
 
 
 class Event(SQLModel, table=True):

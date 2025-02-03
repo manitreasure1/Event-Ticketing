@@ -2,19 +2,21 @@ from sqlmodel import SQLModel
 from sqlalchemy.ext.asyncio import create_async_engine
 from sqlmodel.ext.asyncio.session import AsyncSession
 from sqlalchemy.orm import sessionmaker
-from core.config import settings
+from core.config import EnvConfig
 from typing import AsyncGenerator
 
-engine = create_async_engine(settings.DATABASE_URL, echo=True)
+env_config = EnvConfig() # type: ignore
+
+engine = create_async_engine(env_config.DATABASE_URL)
 
 async_session_factory = sessionmaker(
-    bind=engine,
+    bind=engine, # type: ignore
     class_=AsyncSession,
     expire_on_commit=False
-)
+) # type: ignore
 
 async def get_session() -> AsyncGenerator[AsyncSession, None]:
-    async with async_session_factory() as session:
+    async with async_session_factory() as session: # type: ignore
             yield session
         
 async def init_db():

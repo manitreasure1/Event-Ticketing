@@ -1,7 +1,7 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
-class Settings(BaseSettings):
+class EnvConfig(BaseSettings):
     DATABASE_URL: str
     SECRET_KEY: str 
     ALGORITHM: str
@@ -15,5 +15,5 @@ class Settings(BaseSettings):
     )  
 
 
-settings = Settings()
+
 
