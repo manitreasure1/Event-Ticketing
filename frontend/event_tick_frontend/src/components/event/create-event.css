@@ -1,0 +1,56 @@
+
+
+.register_form fieldset {
+    border: none;
+    padding: 0;
+}
+
+.register_form legend {
+    font-size: 1.5em;
+    margin-bottom: 20px;
+    color: #333;
+    opacity: 0.5;
+    font-weight: bolder;
+}
+
+.register_form div {
+    margin-bottom: 15px;
+}
+
+.register_form label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #555;
+}
+
+
+
+.register_form .box_input {
+    display: flex;
+    justify-content: space-between;
+}
+
+.register_form .box_input div {
+    flex: 1;
+    margin-right: 10px;
+}
+
+.register_form .box_input div:last-child {
+    margin-right: 0;
+}
+
+.register_form button {
+    padding: 10px 15px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s;
+}
+
+.register_form button:hover {
+    background-color: #0056b3;
+}

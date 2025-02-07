@@ -1,39 +1,52 @@
 
 services:
-  app:
+  backend:
     build: 
-      context: .
+      context: ./backend
       dockerfile: Dockerfile
     ports:
       - "8000:8000"
     volumes:
-      - .:/app
+      - ./backend:/app
     depends_on:
       db:
         condition: service_healthy
     env_file:
-      - .env
-    environment:
-      - DATABASE_URL=${DATABASE_URL}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+      - ./backend/.env
+    command: uvicorn backend.app.main:app --host 0.0.0.0 --port 8000 --reload
 
+  frontend:
+    build: 
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+    - ./frontend/event_tick_frontend:/src
+    - /app/node_modules
+    depends_on:
+      - backend
+    command: npm start
 
   db:
     image: postgres:15
     container_name: event_tick_db
     ports:
       - "5432:5432"
-    env_file:
-      - .env
+    env_file: 
+      - ./backend/.env
     volumes:
-      - ./data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "postgres"]
       interval: 10s
       timeout: 5s
       retries: 5
       start_period: 30s
+    
 
 volumes:
   postgres_data:
+
+
+  

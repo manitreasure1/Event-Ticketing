@@ -1,0 +1,29 @@
+
+ .input{
+   display: block;
+   margin-top: 1rem;
+   padding: 10px 7rem 5px 5px;
+   border-radius: 5px;
+   border: none;
+
+ }
+ input::placeholder{
+  font-size: large;
+ }
+ .toggleForm{
+   background-color: #000;
+   color: aliceblue;
+   position: relative;
+   padding: 12px;
+
+   
+ }
+ .toggleForm span{
+   cursor: pointer;
+   margin: 1rem;
+   padding: 10px;
+   border-radius: 5px;
+ }
+ button{
+  margin-top: 2rem;
+ }
