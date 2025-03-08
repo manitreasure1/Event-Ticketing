@@ -1,0 +1,13 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "name": "host",
+            "database": "event_tick_db",
+            "username": "postgres"
+        }
+    ]
+}

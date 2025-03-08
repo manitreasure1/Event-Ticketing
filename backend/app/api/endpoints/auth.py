@@ -23,6 +23,7 @@ async def login(*, data: Annotated[LoginRequest, Form()], session: AsyncSession 
 
 @router.post("/register/", status_code=status.HTTP_201_CREATED)
 async def sign_up(*, data: Annotated[SignUpScheme, Form()], session: AsyncSession = Depends(get_session)):
+    print(data)
     sign_up_data = await auth_services.sign_up(data, session)
     return sign_up_data
 

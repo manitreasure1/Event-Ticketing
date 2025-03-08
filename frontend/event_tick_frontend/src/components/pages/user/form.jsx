@@ -1,44 +1,65 @@
 
 import { useState } from "react"
-import styles from './form.module.css'
+import styles from './user.module.css'
+import axios from 'axios'
+
 
 const UserForm = () => {
+
     const [isSignUp, setIsSingUp] = useState(false)
-    const [formfields, setFormfields] = useState([{
+    const fields = isSignUp
+     ? {
         email: "",
-        password: ""
-    }])
+        password: "",
+    }
+     :{
+        firstname: "",
+        lastname: "",
+        email: "",
+        password: "",
+        confirmPassword: ""
+    }
+
+
+    const [formfields, setFormfields] = useState(fields)
     const toggleForm = ()=>{
         setIsSingUp(!isSignUp)
-        setFormfields([{
-            firstname: "",
-            lastname: "",
-            email: "",
-            password: "",
-            confirmPassword: ""
-
-        }])
+        setFormfields(fields)
     }
-    console.log(formfields)
 
-    const handleSubmit =(e) => {
+    const handleSubmit = async(e) => {
         e.preventDefault()
         if(isSignUp){
-            const {password, confirmPassword } = formfields[0];
+            const {password, confirmPassword } = formfields;
             if(confirmPassword !== password){
                 alert("Password must match! ")
                 return;
                 
             }
         }
-        
+        try{
+            delete formfields.confirmPassword
+
+            const requesUrl = isSignUp
+            ? 'http://127.0.0.1:8000/auth/v1/register/' 
+            : 'http://127.0.0.1:8000/auth/v1/login/'
+
+            const res = await axios.post(requesUrl, formfields,{
+                  headers: {
+                'Content-Type': 'multipart/form-data'
+            }})
+            sessionStorage.setItem('accessToken', res.data['access_token'])
+        }catch(err){
+            console.error(err)
+        }
     }
     
     const handleChange = (e) =>{
         const {name, value} = e.target;
-        const newField = [...formfields];
-        newField[0][name] = value;
-        setFormfields(newField)
+        setFormfields((prevForm)=>({
+            ...prevForm,
+            [name]: value
+        }))
 
     }
     
@@ -59,7 +80,7 @@ const UserForm = () => {
         </span>
     </div>
     
-    <form action="" method="post" encType="multipart/form-data" onSubmit={handleSubmit}>
+    <form action="" method="post" onSubmit={handleSubmit}>
         {
             isSignUp 
             &&( 
@@ -67,7 +88,7 @@ const UserForm = () => {
             className={styles.input}
                 type="text" 
                 placeholder="firstname" 
-                value={formfields[0].firstname} 
+                value={formfields.firstname} 
                 name="firstname" required
                 onChange={handleChange}
             />
@@ -80,7 +101,7 @@ const UserForm = () => {
                 className={styles.input}
                     type="text" 
                     placeholder="lastname" 
-                    value={formfields[0].lastname}
+                    value={formfields.lastname}
                     name="lastname" required
                     onChange={handleChange}
 
@@ -92,7 +113,7 @@ const UserForm = () => {
             type="email" 
             name="email"
             placeholder="email"
-            value={formfields[0].email}
+            value={formfields.email}
             required
             onChange={handleChange}
 
@@ -102,7 +123,7 @@ const UserForm = () => {
             type="password"
             name="password"
             placeholder="password"
-            value={formfields[0].password}
+            value={formfields.password}
             required
             onChange={handleChange}
 
@@ -114,7 +135,7 @@ const UserForm = () => {
                     className={styles.input}
                     type="password" 
                     name="confirmPassword" 
-                    value={formfields[0].confirmPassword}
+                    value={formfields.confirmPassword}
                     placeholder="confirm password"
                     required
                     onChange={handleChange}

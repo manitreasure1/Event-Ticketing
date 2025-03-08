@@ -16,7 +16,7 @@ class AuthService:
     async def sign_up(self, data: SignUpScheme, session: AsyncSession):
         existing_user = await user_service.existing_user(data.email, session)
         if existing_user:
-            return HTTPException(status.HTTP_403_FORBIDDEN, detail="Email already registered")
+            raise HTTPException(status.HTTP_403_FORBIDDEN, detail="Email already registered")
         password= utils.hash_password(data.password)
         new_user = UserDb(
             firstname=data.firstname,

@@ -1,4 +1,4 @@
-from typing import Any
+
 from fastapi import HTTPException, status
 from sqlmodel import select, col
 from app.db.models import Organization

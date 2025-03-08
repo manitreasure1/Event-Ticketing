@@ -69,14 +69,15 @@ class OrganizationRead(OrganizationBase):
 #  * event schemas
 """
 class EventBase(BaseModel):
-    name: str
+    title: str
     description: str
     # img_url : Optional[bytes] = None
     ticket_price: float
     tickets_available: int
     venue: Optional[str] = None
     address: Optional[str] = None
-    date: datetime
+    start_date: datetime
+    end_data: datetime
     
 class EventCreate(EventBase):
     organization_id: int

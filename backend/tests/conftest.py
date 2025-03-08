@@ -14,6 +14,7 @@ async def test_app():
         transport=ASGITransport(app=app), base_url="http://test"
     ) as ac:
         yield ac
+        
 
 @pytest_asyncio.fixture(name='session')
 async def session_fixture():

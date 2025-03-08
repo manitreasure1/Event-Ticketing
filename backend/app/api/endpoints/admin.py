@@ -1,6 +1,5 @@
 
 from fastapi import APIRouter, Depends, HTTPException, status
-from fastapi.responses import JSONResponse
 from sqlmodel import select
 from app.db.models import Organization, UserDb, Event
 from sqlmodel.ext.asyncio.session import AsyncSession
@@ -9,19 +8,20 @@ from app.db.sessions import get_session
 
 router = APIRouter()
 
-
 @router.get("/dashboard")
 async def admin_dashboard(session: AsyncSession = Depends(get_session)):
     users = await session.exec(select(UserDb))
     organizations = await session.exec(select(Organization))
     events = await session.exec(select(Event))
-    return JSONResponse(
-        content={
+    dashboard_data = {
             "users": users.all(),
             "organizations": organizations.all(),
             "events": events.all()
         }
-    )
+    return dashboard_data
+    
+    
+
     
     
 @router.get("/users/{user_id}")
