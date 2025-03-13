@@ -1,15 +1,45 @@
 
 import './partial.css'
 import { Link } from 'react-router-dom';
+import Sidenav from './sidenav';
+import { useState } from 'react';
+import PropTypes from 'prop-types'
+import UserForm from '../pages/user/form'
 
 
-function Navbar() {
+
+export default function Navbar({isLogin}) {
+    const [showSidenav, SetShowSidenav] = useState(false)
+    const [showForm, setShowForm] = useState(false)
+
+    const handleSideNavClick= ()=>{
+        SetShowSidenav(!showSidenav)
+    }
+    const handleUserFormClick = ()=>{
+        setShowForm(!showForm)
+
+    }
+
+    const LoginOrSignUp = () =>{
+        return(
+            <>
+                <ul style={{marginRight:'2rem',padding: '0 5px', backgroundColor:"rgb(141, 172, 170)", borderRadius:'5px'}} onClick={handleUserFormClick}>
+                    <li>Login</li>
+                </ul>
+                
+            </>
+
+        )
+    }
+    
   return (
     <>
+    {showForm &&<UserForm onClose={handleUserFormClick}/>}
+    
     <nav className='topnav'>
         <ul>
             <li>
-               <Link to='/dicover'>Discover</Link> 
+               <Link to='/'>Discover</Link> 
             </li>
             <li>
                 <Link to='/Tickets'>Tickets</Link>
@@ -21,12 +51,19 @@ function Navbar() {
                 <Link to='/live'>Live</Link>
             </li>
         </ul>
-        <picture>
-            <img src="/image.png" alt="user-profile"  />
-        </picture>
+
+        {isLogin ? <LoginOrSignUp/> : (
+                <picture>
+                    <img src="/image.png" alt="user-profile" onClick={handleSideNavClick} />
+                </picture>
+            )
+        }
     </nav>
+    {showSidenav && <Sidenav onClose={handleSideNavClick}/>}
     </>
   )
 }
 
-export default Navbar;
+Navbar.propTypes = {
+    isLogin : PropTypes.bool.isRequired
+};

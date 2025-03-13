@@ -1,0 +1,246 @@
+
+ul{
+    list-style: none;
+}
+
+
+/* Highlights.css */
+
+.highlights-container {
+    padding: 20px;
+    text-align: center;
+    background: #121212;
+    color: white;
+  }
+  
+  .highlights-title {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  .loading-text,
+  .error-text,
+  .no-content {
+    font-size: 1.2rem;
+    color: #ccc;
+  }
+  
+  .highlights {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    align-items: center;
+    overflow: auto;
+    padding: 10px;
+  }
+  
+  .highlight-card {
+    background: #1e1e1e;
+    padding: 15px;
+    border-radius: 10px;
+    width: 300px;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  
+  .highlight-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 10px rgba(255, 255, 255, 0.2);
+  }
+  
+  .video-title {
+    font-size: 1rem;
+    margin-top: 10px;
+    color: #f5a623;
+  }
+  
+/* LeaguesCard.css */
+
+.leagues-container {
+    padding: 20px;
+    text-align: center;
+    background: #f8f9fa;
+    color: #333;
+    
+  }
+  
+  .leagues-title {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  .loading-text,
+  .error-text,
+  .no-content {
+    font-size: 1.2rem;
+    color: #666;
+  }
+  
+  .leagues {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5rem;
+    padding: 10px;
+  }
+  
+  .leagues__card {
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    width: 320px;
+    box-shadow: 2px 2px 10px rgba(0, 128, 0, 0.3);
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s;
+  }
+  
+  .leagues__card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px rgba(0, 128, 0, 0.5);
+  }
+  
+  .league-name {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: green;
+  }
+  
+  .league-details {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+  }
+  
+  .league-info,
+  .country-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .league-info h3,
+  .country-info h3 {
+    font-size: 1rem;
+    margin-bottom: 5px;
+  }
+  
+  img {
+    border-radius: 5px;
+  }
+  
+
+
+
+
+  /* LiveEvent.css */
+
+.live-container {
+    padding: 20px;
+    background-color: #121212;
+    min-height: 100vh;
+    color: white;
+    text-align: center;
+  }
+  
+  .live-title {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  .live-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    justify-content: center;
+  }
+  
+  .match-card {
+    background: #1e1e1e;
+    padding: 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  
+  .match-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 10px rgba(255, 255, 255, 0.2);
+  }
+  
+  .match-teams {
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+  
+  .match-date {
+    color: #bbb;
+    margin: 10px 0;
+  }
+  
+  .match-score {
+    font-size: 1.1rem;
+    color: #4caf50;
+  }
+  
+  .no-matches {
+    font-size: 1.2rem;
+    color: #ccc;
+  }
+  
+  /* Match Details */
+  .match-details {
+    background: #1e1e1e;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 600px;
+    margin: auto;
+  }
+  
+  .details-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+  
+  .details-info {
+    font-size: 1rem;
+    color: #bbb;
+    margin: 5px 0;
+  }
+  
+  .details-section {
+    margin-top: 15px;
+    text-align: left;
+  }
+  
+  .details-section h3 {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #f5a623;
+  }
+  
+  .details-section ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .details-section li {
+    font-size: 0.95rem;
+    color: #ddd;
+  }
+  
+  .back-button {
+    background: #ff4d4d;
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 15px;
+    transition: background 0.3s;
+  }
+  
+  .back-button:hover {
+    background: #ff3333;
+  }
+  

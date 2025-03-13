@@ -4,7 +4,7 @@ import styles from './user.module.css'
 
 import PropTypes from 'prop-types';
 
-export default function UserDashboardData({lable1, lable1Data, lable2, lable2Data, lable3, lable3Data,lable4, lable4Data, }) {
+export function UserDashboardData({lable1, lable1Data, lable2, lable2Data, lable3, lable3Data,lable4, lable4Data, }) {
   return (
     <>
     <section className={styles.circle__notice}>
@@ -29,18 +29,44 @@ export default function UserDashboardData({lable1, lable1Data, lable2, lable2Dat
     </>
   );
 }
-export const TableData =()=>{
+
+export const OrganizationTableData = ({orgData}) =>{
+  return(
+    <>
+    {orgData.map((org) => (
+          <tr key={org.id}>
+            <td>{org.id}</td>
+            <td>{org.name}</td>
+            <td>
+              {org.image_url}
+            </td>
+            <td>{org.email}</td>
+            <td>{org.description}</td>
+            <td>{org.created_by}</td>
+            <td>{org.events ? org.events.length : 0}</td>
+          </tr>
+        ))}
+    </>
+  )
+}
+
+export const EventTableData =({tableData})=>{
     return (
         <>
-         <tr>
-              <td>eeeeeeeeee</td>
-              <td>aaaaaaaaaaatttt</td>
-              <td>sssssssst</td>
-              <td>eeeeeeeeed</td>
-              <td>ddddddddy</td>
-              <td>bbbbbbbbl</td>
-              <td>sssssssssssst</td>
-          </tr>   
+
+        {
+          tableData.map((data)=>(
+          <tr key={data.id}>
+                <td>{data.event}</td>
+                <td>{data.attendeeType}</td>
+                <td>{data.starts}</td>
+                <td>{data.ends}</td>
+                <td>{data.day}</td>
+                <td>{data.booked}</td>
+                <td>{data.status}</td>
+            </tr>   
+          ))
+        }
         </>
     )
 
@@ -57,4 +83,10 @@ UserDashboardData.propTypes = {
     
 };
 
+EventTableData.propTypes = {
+  tableData: PropTypes.any
+}
+OrganizationTableData.propTypes = {
+  orgData : PropTypes.any
+}
 

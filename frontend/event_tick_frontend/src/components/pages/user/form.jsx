@@ -2,9 +2,9 @@
 import { useState } from "react"
 import styles from './user.module.css'
 import axios from 'axios'
+import PropTypes from 'prop-types'
 
-
-const UserForm = () => {
+export default function UserForm({onClose}){
 
     const [isSignUp, setIsSingUp] = useState(false)
     const fields = isSignUp
@@ -64,89 +64,98 @@ const UserForm = () => {
     }
     
   return (
-    <div className="form_container register_form"> 
-    <fieldset>
-        <legend>{isSignUp? "Sign Up" : "Login"}</legend>
+    <>
+        <div className="form_container register_form"> 
+        <fieldset>
+            <legend>{isSignUp? "Sign Up" : "Login"}</legend>
 
-    <div className={styles.toggleForm}>
+        <div className={styles.toggleForm}>
+            
+            <span onClick={toggleForm}
+                style={{backgroundColor: isSignUp ? "black": "white", color: !isSignUp && 'black'}}>
+                    Login
+            </span>
+            <span onClick={toggleForm}
+                style={{backgroundColor: !isSignUp ? "black": "white", color: isSignUp && 'black'}}>
+                    SignUp
+            </span>
+        </div>
         
-        <span onClick={toggleForm}
-            style={{backgroundColor: isSignUp ? "black": "white", color: !isSignUp && 'black'}}>
-                Login
-        </span>
-        <span onClick={toggleForm}
-            style={{backgroundColor: !isSignUp ? "black": "white", color: isSignUp && 'black'}}>
-                SignUp
-        </span>
-    </div>
-    
-    <form action="" method="post" onSubmit={handleSubmit}>
-        {
-            isSignUp 
-            &&( 
-            <input 
-            className={styles.input}
-                type="text" 
-                placeholder="firstname" 
-                value={formfields.firstname} 
-                name="firstname" required
-                onChange={handleChange}
-            />
-            )
-        }
-        {
-            isSignUp 
-            &&( 
+        <form action="" method="post" onSubmit={handleSubmit}>
+            {
+                isSignUp 
+                &&( 
                 <input 
                 className={styles.input}
                     type="text" 
-                    placeholder="lastname" 
-                    value={formfields.lastname}
-                    name="lastname" required
+                    placeholder="firstname" 
+                    value={formfields.firstname} 
+                    name="firstname" required
                     onChange={handleChange}
-
                 />
-            )
-        }
-        <input
-            className={styles.input}
-            type="email" 
-            name="email"
-            placeholder="email"
-            value={formfields.email}
-            required
-            onChange={handleChange}
-
-        />
-        <input
-            className={styles.input}
-            type="password"
-            name="password"
-            placeholder="password"
-            value={formfields.password}
-            required
-            onChange={handleChange}
-
-        />
-        {
-            isSignUp 
-            &&( 
-                <input
+                )
+            }
+            {
+                isSignUp 
+                &&( 
+                    <input 
                     className={styles.input}
-                    type="password" 
-                    name="confirmPassword" 
-                    value={formfields.confirmPassword}
-                    placeholder="confirm password"
-                    required
-                    onChange={handleChange}
-                />
-            )
-        }    
-        <button>{isSignUp? "Sign Up" : "Login"}</button>        
-    </form>
-    </fieldset>
-    </div>
+                        type="text" 
+                        placeholder="lastname" 
+                        value={formfields.lastname}
+                        name="lastname" required
+                        onChange={handleChange}
+
+                    />
+                )
+            }
+            <input
+                className={styles.input}
+                type="email" 
+                name="email"
+                placeholder="email"
+                value={formfields.email}
+                required
+                onChange={handleChange}
+
+            />
+            <input
+                className={styles.input}
+                type="password"
+                name="password"
+                placeholder="password"
+                value={formfields.password}
+                required
+                onChange={handleChange}
+
+            />
+            {
+                isSignUp 
+                &&( 
+                    <input
+                        className={styles.input}
+                        type="password" 
+                        name="confirmPassword" 
+                        value={formfields.confirmPassword}
+                        placeholder="confirm password"
+                        required
+                        onChange={handleChange}
+                    />
+                )
+            }    
+            <button>{isSignUp? "Sign Up" : "Login"}</button>        
+        </form>
+        </fieldset>
+        </div>
+        <div className="overlay" onClick={onClose}>
+        </div>
+    </>
   )
 }
 
-export default UserForm;
+
+
+
+UserForm.propTypes = {
+    onClose : PropTypes.func.isRequired
+}
