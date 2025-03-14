@@ -269,14 +269,15 @@ export default function UserDashboard() {
       <nav className={styles.user_dashbord_nav}>
         <ul>
           
-          <li><Link to="/my/events">Event</Link></li>
-          <li><Link to="/my/organizations">Organization</Link></li>
+          <li><Link to="/dashboard/events">Event</Link></li>
+          <li><Link to="/dashboard/organizations">Organization</Link></li>
         </ul>
       </nav>
       <hr />
     <Routes>
-      <Route index path="/my/events" element={<EventData/>}/>
-      <Route path="/my/organizations" element={<OrganizationData/>}/>
+      <Route index element={<EventData />} />
+      <Route path="events" element={<EventData />} />
+      <Route path="organizations" element={<OrganizationData/>}/>
     </Routes>
       
     </div>

@@ -124,4 +124,9 @@ class AdminPublic(AdminBase):
 """
 #  todo : ticket schemas 
 """
-    
+
+class TicketBase(BaseModel):
+    email: EmailStr
+    tel: int
+    PaymentMethod: list
+    pass

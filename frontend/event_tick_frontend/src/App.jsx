@@ -2,12 +2,13 @@ import './App.css'
 import EventCard from './components/pages/event/event-card'
 // import AdminApi from './components/utils/admin/admin-api'
 
-import {BrowserRouter, Routes, Route} from 'react-router-dom'
+import { Routes, Route, useLocation} from 'react-router-dom'
 
 import Discover from './components/extra/discover'
 import Live from './components/extra/live'
 import Navbar from './components/partial/navbar'
 import Footer from './components/partial/footer'
+import UserDashboard from './components/pages/user/user-dashboard'
 // import EventApi from './components/utils/events/event-api'
 
 
@@ -126,25 +127,30 @@ const responseData = [
 
 
 function App() {    
-  // console.log(`my secret key ${import.meta.env.API_KEY}`)
+  const location = useLocation();
+  const isDashboardRoute = location.pathname.startsWith('/dashboard');
+
 
   return (
     <>
-      <BrowserRouter>
-      <Navbar/>
-      <Routes>
-        <Route path='/' element={<Discover/>}/>
-        <Route path='/tickets' element={""}/>
-        <Route path='/events' element={<div style={{display:'flex', flexWrap:'wrap', justifyContent:'center'}}>
-        <EventCard  responseData={responseData}/>
-      </div>}/>
-        <Route path='/live' element={<Live/>}/>
-      </Routes>
-        <Footer/> 
-      </BrowserRouter>
+      
+
+        {!isDashboardRoute && <Navbar/>}
+        <Routes>
+          <Route path='/' element={<Discover/>}/>
+          <Route path='/tickets' element={""}/>
+          <Route path='/events' element={<EventCard  responseData={responseData}/>}/>
+          <Route path='/live' element={<Live/>}/>
+          <Route path="/dashboard/*" element={<UserDashboard/>} />
+        </Routes>
+        
+
+        {!isDashboardRoute && <Footer/> }
+      
+        
     </>
   )
 }
 
-export default App
+export default App;
 

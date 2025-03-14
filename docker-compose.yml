@@ -13,7 +13,6 @@ services:
         condition: service_healthy
     env_file:
       - .env
-    command: uvicorn app.main:app --reload
 
   frontend:
     build: 

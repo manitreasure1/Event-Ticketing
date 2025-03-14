@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import axios from 'axios'
 
 
-export function PaymentMethod({ onPaymentSelect }) {
+function PaymentMethod({ onPaymentSelect }) {
   const [selectedPayment, setSelectedPayment] = useState(null);
 
   const paymentOptions = [
@@ -52,9 +52,7 @@ PaymentMethod.propTypes = {
 
 
 export const CardDetails = ({data, onClose})=>{
-
     const [selectedPayment, setSelectedPayment] = useState(null);
-
     const [registerData, SetRegisterData] = useState({
         email: "",
         tel: ""
@@ -63,7 +61,7 @@ export const CardDetails = ({data, onClose})=>{
     const handleSubmit = async (e)=>{
         e.preventDefault()
         try{
-            const response = await axios.post('http://127.0.0.1:8000/api/tickets',{
+            const response = await axios.post('http://127.0.0.1:8000/tickets/v1/purchase',{
                 email:registerData.email,
                 tel: registerData.tel,
                 PaymentMethod: selectedPayment
@@ -144,7 +142,8 @@ export default function EventCard({ responseData }) {
     }
     
   return (
-        responseData.length > 0
+    <div style={{display:'flex', flexWrap:'wrap', justifyContent:'center'}}>
+        {responseData.length > 0
         ? responseData.map((data) => (
             <div key={data.id}>
                 <div className='event-card-background'>
@@ -171,6 +170,8 @@ export default function EventCard({ responseData }) {
                 {showDetails && showDetails.id === data.id && <CardDetails data={showDetails} onClose={handleCloseClick}/>}
             </div>
         )) : <h1>No Content</h1>
+        }
+    </div>
   )
 }
 
