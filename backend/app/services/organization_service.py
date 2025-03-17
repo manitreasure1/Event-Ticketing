@@ -1,7 +1,7 @@
 
 from fastapi import HTTPException, status
 from sqlmodel import select, col
-from app.db.models import Organization
+from app.db.models import Organization, UserOrganization
 from app.db.schemas import OrganizationCreate
 from sqlmodel.ext.asyncio.session import AsyncSession
 
@@ -18,7 +18,7 @@ class OrganizationService:
                                   session: AsyncSession,
                                   user_id: int
                                   ):
-        get_org = await self.get_organization(data.email, session)
+        get_org = await self.get_organization(data.email, session) # type: ignore
         if get_org:
             raise HTTPException(status.HTTP_403_FORBIDDEN, detail="Organization email already registered")
         organization_data = Organization(
@@ -30,6 +30,12 @@ class OrganizationService:
         session.add(organization_data)
         await session.commit()
         await session.refresh(organization_data)
+
+        user_org = UserOrganization(user_id=user_id, organization_id=organization_data.id)
+        session.add(user_org)
+        await session.commit()
+        await session.refresh(user_org)
+
         return organization_data       
     
 

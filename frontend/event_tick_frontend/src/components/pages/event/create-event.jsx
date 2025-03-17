@@ -1,25 +1,44 @@
 
 import { useState } from 'react'
 import  './create-event.css'
+import PropTypes from 'prop-types'
+import axios from 'axios'
 
-
-export default function CreateEvent() {
+export default function CreateEvent({onClose, orgId}) {
+    
     const [eventForm, setEventForm] = useState({
-        name:"",
-        description:"",
-        ticket_price:"",
+        title: "",
+        description: "",
+        ticket_price: "",
         available_tickets: "",
-        venue:"",
-        address:"",
-        date:""
+        venue: "",
+        address: "",
+        start_date: "",
+        end_date: ""
     })
 
-    const onSubmit = (e)=>{
-        e.preventDefault()
+    const onSubmit = async(e)=>{
+        e.preventDefault();
+        try{
+            const token = sessionStorage.getItem('accessToken')
+            eventForm["organization_id"] = orgId
+            console.log("Event Form Data:", eventForm); 
 
+            await axios.post('http://127.0.0.1:8000/organizations/v1/create/event/', eventForm, {
+                headers:{
+                    "Authorization": `Bearer ${token}`,
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
+            console.log(eventForm)
+        }catch(err){
+            console.error(err)
+        }
     }
+    console.log(eventForm)
+    
 
-    const onChange =(e)=>{
+    const handelChange =(e)=>{
         const {name, value} = e.target;
         setEventForm((preForm)=>({
                 ...preForm,
@@ -30,27 +49,33 @@ export default function CreateEvent() {
 
 
   return (
+    <>
+
     <div className=  "register_form form_container" >
-        <fieldset>
+        
             <legend>Add Event</legend>
-        <form action="" method="post" onSubmit={onSubmit} encType="multipart/form-data">
+        <form action="" method="post" onSubmit={onSubmit}>
             <div>
                 <label htmlFor="name">Event Name</label>
                 <input 
                 type="text"
-                name="name"
-                value={eventForm.name}
-                onChange={onChange}
+                name="title"
+                value={eventForm.title}
+                required
+                onChange={handelChange}
                 placeholder='My event name'/>
             </div>
             <div>
                 <label htmlFor="description">Description</label>
-                <textarea
+                <textarea style={{resize:'none', width:'500px'}}
                     name="description"
-                    cols="20" rows="7"
+                    rows="7"
                     value={eventForm.description}
-                    onChange={onchange}
+                    required
+                    
+                    onChange={handelChange}
                     placeholder="type here ...">
+                    
                 </textarea>
             </div>
             <div className="box_input">
@@ -59,8 +84,9 @@ export default function CreateEvent() {
                     <input
                     type="text"
                     name="ticket_price"
+                    required
                     value={eventForm.ticket_price}
-                    onChange={onChange}
+                    onChange={handelChange}
                     placeholder='ticket price' />
                 </div>
                 <div>
@@ -69,7 +95,8 @@ export default function CreateEvent() {
                     type="text"
                     name="available_tickets"
                     value={eventForm.available_tickets}
-                    onChange={onChange}
+                    required
+                    onChange={handelChange}
                     placeholder='number of tickets'  />
                 </div>
             </div>
@@ -80,7 +107,8 @@ export default function CreateEvent() {
                 type="text"
                 name="venue"
                 value={eventForm.venue}
-                onChange={onChange}
+                onChange={handelChange}
+                required
                 placeholder='my event location' />
             </div>
             <div>
@@ -89,17 +117,30 @@ export default function CreateEvent() {
                 type="text"
                 name="address"
                 value={eventForm.address}
-                onChange={onChange}
+                required
+                onChange={handelChange}
                 placeholder='address' />
             </div>
             <div>
                 <label htmlFor="">Date of commence</label>
                 <input
                 type="datetime-local" 
-                name="date"
-                value={eventForm.date}
-                onChange={onChange}
+                name="start_date"
+                value={eventForm.start_date}
+                onChange={handelChange}
+                required
                 placeholder='date of commence'
+                />
+            </div>
+            <div>
+                <label htmlFor="">End Date</label>
+                <input
+                type="datetime-local" 
+                name="end_date"
+                value={eventForm.end_date}
+                onChange={handelChange}
+                required
+                placeholder='end date'
                 />
             </div>
             <div>
@@ -107,7 +148,14 @@ export default function CreateEvent() {
             </div>
             
         </form>
-        </fieldset>
+        
     </div>
+        <div className='overlay' onClick={onClose}></div>
+    </>
   )
+}
+
+CreateEvent.propTypes ={
+    onClose: PropTypes.func.isRequired,
+    orgId : PropTypes.any
 }

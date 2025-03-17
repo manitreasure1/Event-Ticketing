@@ -1,7 +1,8 @@
 import { useState } from "react"
+import PropTypes from 'prop-types'
+import axios from "axios"
 
-
-export default function RegisterOrg() {
+export default function RegisterOrg({onClose}) {
     const [orgForm, SetOrgForm] = useState({
         name:"",
         email:"",
@@ -9,8 +10,19 @@ export default function RegisterOrg() {
 
     })
 
-    const OnSubmit = (e)=>{
+    const OnSubmit = async(e)=>{
         e.preventDefault()
+        const token = sessionStorage.getItem('accessToken')
+        try{
+            await axios.post('http://127.0.0.1:8000/users/v1/register/organization/', orgForm,{
+                headers :{
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'multipart/form-data'
+                }}
+            ).then((res)=>console.log(res))
+        }catch(err){
+            console.error(err)
+        }
     }
 
     const handleOnChange =(e)=>{
@@ -21,8 +33,8 @@ export default function RegisterOrg() {
         }))
     }
   return (
+    <>
 
-    
     <div className="register_form form_container">
         <fieldset>
             <legend>Register Organization</legend>
@@ -48,18 +60,25 @@ export default function RegisterOrg() {
                 <div>
                     <label htmlFor="description">About the organization</label>
                     <textarea
+                    style={{resize:'none', width:'500px'}}
                         name="description" 
-                        cols="30" rows="10" 
+                         rows="7" 
                         value={orgForm.description}
                         onChange={handleOnChange}
                         placeholder="Description ...">
                     </textarea>
                 </div>
                 <div>
-                    <button type="submit">Create</button>
+                    <button type="submit">Create Organization</button>
                 </div>
             </form>
         </fieldset>
     </div>
+    <div className="overlay" onClick={onClose}></div>
+    </>
+    
   )
+}
+RegisterOrg.propTypes ={
+    onClose: PropTypes.func
 }

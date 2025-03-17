@@ -20,8 +20,6 @@ function AdminApi() {
          })
 
     }
-
-
     useEffect(()=>{
         fetchDashBoardData()
     },[]);

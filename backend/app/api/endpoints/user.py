@@ -7,7 +7,7 @@ from ..dependencies import get_current_user
 from app.db.schemas import OrganizationCreate, UserUpdate, OrganizationRead
 from app.services.user_service import UserService
 from sqlmodel import select
-from app.db.models import Organization
+from app.db.models import Organization, UserDb, UserOrganization
 
 
 router = APIRouter()
@@ -46,9 +46,14 @@ async def update_user_img(
     await session.refresh(userdb)
 
 
-@router.get("/me/organization/", response_model=List[OrganizationRead])
+@router.get("/me/organizations/", response_model=List[OrganizationRead])
 async def my_organization(current_user= Depends(get_current_user), session: AsyncSession = Depends(get_session)):
-    result = await session.exec(select(Organization).where(Organization.created_by == current_user.id))
+    result = await session.exec(
+        select(Organization)
+        .join(UserOrganization, UserOrganization.organization_id == Organization.id) # type: ignore
+        .join(UserDb, UserDb.id == UserOrganization.user_id) # type: ignore
+        .where(UserDb.username == current_user.username)
+        )
     user_orgs = result.all()
     return user_orgs
 

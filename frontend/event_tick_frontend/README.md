@@ -1,8 +1,28 @@
-# React + Vite
+# Event Ticketing Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Routes
 
-Currently, two official plugins are available:
+The frontend application has the following main routes:
+- **Discover**: `/discover`
+- **Events**: `/events`
+- **Ticket**: `/ticket`
+- **Live**: `/live`
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Navbar Behavior
+
+### When User is Logged Out
+- The navbar will display a `Login` option.
+
+### When User is Logged In
+- The `Login` option will be removed.
+- The navbar will display the `User Profile`.
+
+## User Profile
+
+The `User Profile` is a sidenav that includes additional routes:
+- **Profile Details**: `/profile`
+- **My Tickets**: `/my-tickets`
+- **Settings**: `/settings`
+- **Logout**: `/logout`
+
+Ensure to implement the necessary authentication checks to toggle the navbar options based on the user's login status.

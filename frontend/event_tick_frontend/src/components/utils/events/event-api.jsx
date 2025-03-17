@@ -26,7 +26,7 @@ function EventApi() {
   return (
     
     <div>
-        {loading && <div>Loading ...</div>}
+        {loading && <div className="Loading">Loading ...</div>}
         <DataTable responseData={eventdata}/>
     </div>
   )

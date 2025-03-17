@@ -1,7 +1,7 @@
 from datetime import datetime
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, ValidationError
 from typing import Optional
-
+from datetime import datetime
 
 """
 # * user schemas 
@@ -63,6 +63,12 @@ class OrganizationCreate(OrganizationBase):
 
 class OrganizationRead(OrganizationBase):
     id: int
+    name: str
+    email: str
+    description: str
+    image_url: str | None = None
+    created_by: str | int
+    # events: list 
     
 
 """
@@ -73,14 +79,17 @@ class EventBase(BaseModel):
     description: str
     # img_url : Optional[bytes] = None
     ticket_price: float
-    tickets_available: int
+    available_tickets: int
     venue: Optional[str] = None
     address: Optional[str] = None
     start_date: datetime
-    end_data: datetime
+    end_date: datetime
+
+
     
 class EventCreate(EventBase):
     organization_id: int
+
 
 
 class EventRead(EventBase):
@@ -124,9 +133,21 @@ class AdminPublic(AdminBase):
 """
 #  todo : ticket schemas 
 """
-
 class TicketBase(BaseModel):
+    eventId: int | str
     email: EmailStr
-    tel: int
-    PaymentMethod: list
-    pass
+    tel: str | int
+    paymentMethod: int | str
+
+class PurchaseTicket(TicketBase):
+    cardNumber: int | str
+    cardHolderName: str
+    expiryDate: str | datetime
+    cvv: int | str
+    model_config={'extra': 'forbid'}
+
+try:
+    EventCreate()  # type: ignore
+    PurchaseTicket() # type: ignore
+except ValidationError as exc:
+    print(repr(exc.errors()[0]['type']))

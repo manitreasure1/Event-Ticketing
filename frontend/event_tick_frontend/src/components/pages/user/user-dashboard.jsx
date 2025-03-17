@@ -2,10 +2,29 @@
 import { Link, Route, Routes} from 'react-router-dom';
 import styles from './user.module.css'
 import {UserDashboardData, EventTableData, OrganizationTableData } from './user-dashboard-data';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 
 
 
 export default function UserDashboard() {
+  const [userOrg, SetUserOrg] = useState([])
+
+  
+  const fetchUserOrg = async() =>{
+    try{
+      const token = sessionStorage.getItem('accessToken')
+      await axios.get("http://127.0.0.1:8000/users/v1/me/organizations/", {headers:{'Authorization': `Bearer ${token}`}})
+      .then((res)=>{
+        SetUserOrg(res.data)  
+        console.log(res.data)
+      })
+    }catch(err){
+      console.error(err)
+    }
+  }
+  
+ 
   const tableData = [
     {
       "id": 1,
@@ -108,99 +127,10 @@ export default function UserDashboard() {
        "status": "Confirmed"
      }
   ]
-  const organizationData = [
-    {
-      "id": 1,
-      "name": "Tech Innovators Inc.",
-      "image_url": "https://example.com/tech_innovators.jpg",
-      "email": "info@techinnovators.com",
-      "description": "A leading organization in technological advancements and innovation.",
-      "created_by": "John Doe",
-      "events": [
-        {
-          "id": 101,
-          "event": "AI Summit 2024",
-          "attendeeType": "Developer",
-          "starts": "09:00 AM",
-          "ends": "05:00 PM",
-          "day": "Monday",
-          "booked": "Yes",
-          "status": "Confirmed"
-        },
-        {
-          "id": 102,
-          "event": "Cloud Computing Workshop",
-          "attendeeType": "Engineer",
-          "starts": "10:00 AM",
-          "ends": "12:00 PM",
-          "day": "Tuesday",
-          "booked": "Yes",
-          "status": "Confirmed"
-        }
-      ]
-    },
-    {
-      "id": 2,
-      "name": "Global Marketing Solutions",
-      "image_url": "https://example.com/global_marketing.png",
-      "email": "contact@globalmarketing.net",
-      "description": "Providing cutting-edge marketing strategies and solutions worldwide.",
-      "created_by": "Jane Smith",
-      "events": [
-        {
-          "id": 201,
-          "event": "Digital Marketing Webinar",
-          "attendeeType": "Marketer",
-          "starts": "11:00 AM",
-          "ends": "12:30 PM",
-          "day": "Wednesday",
-          "booked": "Yes",
-          "status": "Confirmed"
-        },
-        {
-          "id": 202,
-          "event": "Social Media Strategy Seminar",
-          "attendeeType": "Manager",
-          "starts": "02:00 PM",
-          "ends": "04:00 PM",
-          "day": "Thursday",
-          "booked": "Yes",
-          "status": "Pending"
-        }
-      ]
-    },
-    {
-      "id": 3,
-      "name": "Community Builders Foundation",
-      "image_url": "https://example.com/community_builders.jpeg",
-      "email": "info@communitybuilders.org",
-      "description": "Dedicated to building stronger communities through various initiatives.",
-      "created_by": "David Lee",
-      "events": [
-        {
-          "id": 301,
-          "event": "Volunteer Cleanup Day",
-          "attendeeType": "Volunteer",
-          "starts": "09:00 AM",
-          "ends": "11:00 AM",
-          "day": "Saturday",
-          "booked": "Yes",
-          "status": "Confirmed"
-        },
-        {
-          "id": 302,
-          "event": "Community Food Drive",
-          "attendeeType": "General",
-          "starts": "12:00 PM",
-          "ends": "02:00 PM",
-          "day": "Sunday",
-          "booked": "Yes",
-          "status": "Confirmed"
-        }
-      ]
-    }
-  ]
-
+  
+  useEffect(()=>{
+    fetchUserOrg()
+  }, [])
 
 
   
@@ -208,27 +138,10 @@ export default function UserDashboard() {
   const OrganizationData =()=>{
     return(
     <>
-      <UserDashboardData lable1="ORG's" lable1Data={2} lable2='Tickets' lable2Data={34} lable3='Active' lable3Data={89} lable4='Visitors' lable4Data={99}/>
+      <UserDashboardData lable1="ORG's" lable1Data='2' lable2='Tickets' lable2Data='34' lable3='Active' lable3Data='89' lable4='Visitors' lable4Data='99'/>
         <hr />
-        <section className={styles.table_container}>
-        <table>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Name</th>
-              <th>Image</th>
-              <th>Email</th>
-              <th>Description</th>
-              <th>Created By</th>
-              <th>Event Count</th>
-            </tr>     
-          </thead>
-          <tbody>
-            <OrganizationTableData orgData={organizationData}/>
-          
-          </tbody>
-        </table>
-        </section>
+      <OrganizationTableData orgData={userOrg}/>
+        
     </>
     );
   }

@@ -5,7 +5,7 @@ from app.core.config import EnvConfig
 from alembic import context
 
 # Load environment configuration
-env_config = EnvConfig()
+env_config = EnvConfig() # type: ignore
 
 # Alembic configuration object
 config = context.config

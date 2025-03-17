@@ -9,6 +9,10 @@ import UserForm from '../pages/user/form'
 
 
 export default function Navbar({isLogin}) {
+    console.log(`user has login : ${isLogin}`)
+
+    
+
     const [showSidenav, SetShowSidenav] = useState(false)
     const [showForm, setShowForm] = useState(false)
 
@@ -52,11 +56,12 @@ export default function Navbar({isLogin}) {
             </li>
         </ul>
 
-        {isLogin ? <LoginOrSignUp/> : (
-                <picture>
-                    <img src="/image.png" alt="user-profile" onClick={handleSideNavClick} />
-                </picture>
-            )
+        {isLogin ? 
+            (
+            <picture>
+                <img src="/image.png" alt="user-profile" onClick={handleSideNavClick} />
+            </picture>
+            ): <LoginOrSignUp/> 
         }
     </nav>
     {showSidenav && <Sidenav onClose={handleSideNavClick}/>}
@@ -65,5 +70,5 @@ export default function Navbar({isLogin}) {
 }
 
 Navbar.propTypes = {
-    isLogin : PropTypes.bool.isRequired
+    isLogin : PropTypes.bool.isRequired,
 };

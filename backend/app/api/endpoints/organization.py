@@ -23,12 +23,13 @@ async def organization_dashboard(organization_id: int, session: AsyncSession = D
     return {"events": org_events.all()}
 
 
-@router.post("/create", response_model=EventRead)
+@router.post("/create/event/", response_model=EventRead)
 async def create_event(*,
                   event: Annotated[EventCreate, Form()],
                   session: AsyncSession = Depends(get_session),
                   current_user = Depends(get_current_user)
                   ):
+    print(event.model_dump())
     add_event = await event_service.create_event(event, session, current_user.id)
     return {"new event": add_event, "message": "Event created successfully"}
 

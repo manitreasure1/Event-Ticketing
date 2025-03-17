@@ -130,12 +130,13 @@ function App() {
   const location = useLocation();
   const isDashboardRoute = location.pathname.startsWith('/dashboard');
 
+  const token = sessionStorage.getItem('accessToken');
+  const isToken = token ? true : false;
+  
 
   return (
     <>
-      
-
-        {!isDashboardRoute && <Navbar/>}
+        {!isDashboardRoute && <Navbar isLogin={isToken}/>}
         <Routes>
           <Route path='/' element={<Discover/>}/>
           <Route path='/tickets' element={""}/>
@@ -143,8 +144,6 @@ function App() {
           <Route path='/live' element={<Live/>}/>
           <Route path="/dashboard/*" element={<UserDashboard/>} />
         </Routes>
-        
-
         {!isDashboardRoute && <Footer/> }
       
         

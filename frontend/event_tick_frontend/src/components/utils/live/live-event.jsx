@@ -45,6 +45,7 @@ LiveEvent.propTypes = {
   API_KEY: PropTypes.string.isRequired,
 };
 
+
 export function LiveSummary({ match, onMatchClick }) {
   return (
     <div className="match-card" onClick={() => onMatchClick(match)}>

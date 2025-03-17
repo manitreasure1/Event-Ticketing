@@ -9,7 +9,7 @@ function GetOrganizationApi() {
 
     const fetchOrganizations = async ()=>{
         setLoading(true)
-        await axios.get('http://localhost:8000/organizations/')
+        await axios.get('http://localhost:8000/organizations/v1')
         .then(response =>{
             try{
                 setOrganizationData(response);
@@ -27,7 +27,7 @@ function GetOrganizationApi() {
 
   return (
     <div>
-        {loading && <div>Loading ...</div>}
+        {loading && <div className="loading">Loading ...</div>}
         <DataTable responseData={organizationData}/>
     </div>
   )
