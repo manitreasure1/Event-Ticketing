@@ -1,7 +1,7 @@
-import axios from "axios";
+
 import { useEffect, useState } from "react";
 import DataTable from "../data-table";
-
+import api from "../../../api";
 
 function AdminApi() {
     const [dashBoardData, setDashBoardData] = useState([])
@@ -9,7 +9,7 @@ function AdminApi() {
 
     const fetchDashBoardData = async()=>{
         setLoading(true)
-         await axios.get("http://127.0.0.1:8000/admin/v1/dashboard")
+         await api.get("/admin/v1/dashboard")
          .then(response => {
              try{
                  setDashBoardData(response.data)

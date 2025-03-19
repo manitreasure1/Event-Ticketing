@@ -23,7 +23,7 @@ VERSION: Final = "v1"
 app = FastAPI(
     title="Event-Ticketing",
     description="Sports Events Ticketing WebApp",
-    version=VERSION
+    version=VERSION, 
     )
 
 add_middleware(app)

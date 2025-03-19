@@ -9,6 +9,7 @@ const AdminForm = () => {
    
     const handleSubmit = (e) => {
         e.preventDefault();
+        window.location.reload();
         
     };
 

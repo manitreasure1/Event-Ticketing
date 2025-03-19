@@ -22,6 +22,7 @@
   margin-top: 2rem;
  }
  .user_dashbord_nav{
+  padding: 0 2rem;
   background-color: #7bece85f;
   font-size: 2rem;
   font-weight: bolder;
@@ -40,6 +41,7 @@
   transform: scale(0.9);
 }
 .circle__notice{
+  padding: 0 2rem;
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
@@ -82,11 +84,6 @@
   padding: 8px 0;
  }
 
- tbody td:hover{
-  cursor: pointer;
-  box-shadow: 0 2px 5px 1px rgb(139, 137, 137);
-  background-color: rgb(219, 223, 226);
- }
 .org_container{
   display: flex;
   flex-wrap: wrap;
@@ -96,9 +93,13 @@
 
 
 .org__card{
+  background: rgb(67, 66, 63) url("/organization.png");
   width: 300px;
-  background-color: rgb(67, 66, 63);
-  color: rgb(175, 206, 204);
+  color: rgb(237, 243, 244);
+  border-radius: 5px;
+}
+.org__card_cover{
+  background-color: rgba(40, 38, 38, 0.578);
 }
 .org__card:hover{
    cursor: pointer;

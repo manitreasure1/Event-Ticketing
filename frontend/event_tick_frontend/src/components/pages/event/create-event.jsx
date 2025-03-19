@@ -2,8 +2,7 @@
 import { useState } from 'react'
 import  './create-event.css'
 import PropTypes from 'prop-types'
-import axios from 'axios'
-
+import api from '../../../api'
 export default function CreateEvent({onClose, orgId}) {
     
     const [eventForm, setEventForm] = useState({
@@ -24,12 +23,13 @@ export default function CreateEvent({onClose, orgId}) {
             eventForm["organization_id"] = orgId
             console.log("Event Form Data:", eventForm); 
 
-            await axios.post('http://127.0.0.1:8000/organizations/v1/create/event/', eventForm, {
+            await api.post('/organizations/v1/create/event/', eventForm, {
                 headers:{
                     "Authorization": `Bearer ${token}`,
                     'Content-Type': 'multipart/form-data'
                 }
             })
+            window.location.reload();
             console.log(eventForm)
         }catch(err){
             console.error(err)

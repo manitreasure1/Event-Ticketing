@@ -1,7 +1,7 @@
-import axios from "axios";
+
 import { useEffect, useState } from "react";
 import DataTable from "../data-table";
-
+import api from "../../../api";
 
 function GetOrganizationApi() {
     const [loading, setLoading] = useState(true);
@@ -9,7 +9,7 @@ function GetOrganizationApi() {
 
     const fetchOrganizations = async ()=>{
         setLoading(true)
-        await axios.get('http://localhost:8000/organizations/v1')
+        await api.get('/organizations/v1')
         .then(response =>{
             try{
                 setOrganizationData(response);

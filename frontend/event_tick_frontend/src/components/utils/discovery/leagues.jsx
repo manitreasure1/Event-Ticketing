@@ -10,19 +10,18 @@ export default function LeaguesCard({ API_KEY, num1, num2 }) {
 
   const LEAGUE_API_URL = `https://apiv2.allsportsapi.com/football/?met=Leagues&APIkey=${API_KEY}`;
 
+  const fetchLeagueData = async () => {
+    try {
+      const response = await axios.get(LEAGUE_API_URL);
+      setLeagues(response.data.result || []);
+    } catch (err) {
+      console.error(err);
+      setError("Failed to load leagues.");
+    } finally {
+      setLoading(false);
+    }
+  };
   useEffect(() => {
-    const fetchLeagueData = async () => {
-      try {
-        const response = await axios.get(LEAGUE_API_URL);
-        setLeagues(response.data.result || []);
-      } catch (err) {
-        console.error(err);
-        setError("Failed to load leagues.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchLeagueData();
   }, []);
 

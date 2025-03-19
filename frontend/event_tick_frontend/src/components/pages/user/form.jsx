@@ -1,23 +1,24 @@
 
 import { useState } from "react"
 import styles from './user.module.css'
-import axios from 'axios'
-import PropTypes from 'prop-types'
 
+import PropTypes from 'prop-types'
+import api from "../../../api"
 export default function UserForm({onClose}){
 
     const [isSignUp, setIsSingUp] = useState(false)
     const fields = isSignUp
      ? {
-        email: "",
-        password: "",
-    }
-     :{
         firstname: "",
         lastname: "",
         email: "",
         password: "",
         confirmPassword: ""
+    }
+     :{
+        
+        email: "",
+        password: "",
     }
 
 
@@ -41,14 +42,19 @@ export default function UserForm({onClose}){
             delete formfields.confirmPassword
 
             const requesUrl = isSignUp
-            ? 'http://127.0.0.1:8000/auth/v1/register/' 
-            : 'http://127.0.0.1:8000/auth/v1/login/'
-
-            const res = await axios.post(requesUrl, formfields,{
+            ? '/auth/v1/register/' 
+            : '/auth/v1/login/'
+            console.log(` this is the request url ${requesUrl}`)
+            console.log(` this is the form field ${JSON.stringify(formfields)}`)
+            const res = await api.post(requesUrl, formfields,{
                   headers: {
                 'Content-Type': 'multipart/form-data'
             }})
-            sessionStorage.setItem('accessToken', res.data['access_token'])
+            if(!isSignUp){
+                sessionStorage.setItem('accessToken', res.data['access_token']);
+            }
+            window.location.reload();
+            
         }catch(err){
             console.error(err)
         }

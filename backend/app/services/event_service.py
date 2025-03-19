@@ -29,12 +29,15 @@ class EventService:
         if not organization:
             raise HTTPException(status.HTTP_403_FORBIDDEN, detail="You are not allowed to create an event for this organization")
         new_event = Event(
-            name=event.name,
+            name=event.title,
             description=event.description,
             ticket_price=event.ticket_price,
-            tickets_available=event.tickets_available,
+            tickets_available=event.available_tickets,
             venue=event.venue,
             address=event.address,
+            start_date=event.start_date,
+            end_data=event.end_date,
+            image_urls=event.img_url,
             organization_id=event.organization_id
         )
         session.add(new_event)

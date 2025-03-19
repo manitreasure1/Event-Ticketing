@@ -46,7 +46,8 @@ class Event(SQLModel, table=True):
     name: str = Field(index=True)
     description: str
     image_urls: Optional[bytes] = None
-    date: datetime = Field(default_factory=datetime.now)
+    start_date: datetime 
+    end_data: datetime
     ticket_price: float
     tickets_available: int
     total_tickets: int = Field(default=100)

@@ -19,7 +19,9 @@ ul{
     display: inline-flex;
     gap: 2rem;
     font-size: 1.3rem;
+    flex-wrap: wrap;
 }
+
 .topnav ul li:hover{
     opacity: 0.5;
     transform: scale(1.1);
@@ -28,6 +30,7 @@ ul{
     transition:linear 100ms;
     border-radius: 5px;
     cursor: pointer;
+    
 }
 .topnav ul li:active{
     background-color: rgb(198, 131, 187);

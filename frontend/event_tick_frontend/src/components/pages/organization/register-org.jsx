@@ -1,6 +1,6 @@
 import { useState } from "react"
 import PropTypes from 'prop-types'
-import axios from "axios"
+import api from "../../../api"
 
 export default function RegisterOrg({onClose}) {
     const [orgForm, SetOrgForm] = useState({
@@ -14,12 +14,13 @@ export default function RegisterOrg({onClose}) {
         e.preventDefault()
         const token = sessionStorage.getItem('accessToken')
         try{
-            await axios.post('http://127.0.0.1:8000/users/v1/register/organization/', orgForm,{
+            await api.post('/users/v1/register/organization/', orgForm,{
                 headers :{
                     Authorization: `Bearer ${token}`,
                     'Content-Type': 'multipart/form-data'
                 }}
             ).then((res)=>console.log(res))
+            window.location.reload();
         }catch(err){
             console.error(err)
         }

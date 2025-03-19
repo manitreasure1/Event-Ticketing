@@ -7,7 +7,7 @@ from ..dependencies import get_current_user
 from app.db.schemas import OrganizationCreate, UserUpdate, OrganizationRead
 from app.services.user_service import UserService
 from sqlmodel import select
-from app.db.models import Organization, UserDb, UserOrganization
+from app.db.models import Organization, UserDb, UserOrganization, Event, Ticket
 
 
 router = APIRouter()
@@ -56,6 +56,19 @@ async def my_organization(current_user= Depends(get_current_user), session: Asyn
         )
     user_orgs = result.all()
     return user_orgs
+
+
+@router.get("/me/events/")
+async def attending_events(current_user= Depends(get_current_user), session: AsyncSession = Depends(get_session)):
+    ressult = await session.exec(
+        select(Event)
+        .join(Ticket, Ticket.event_id == Event.id) #type: ignore
+        .join(UserDb, UserDb.id == Ticket.user_id) #type: ignore
+        .where(UserDb.username == current_user.username)
+    )
+    user_attending_events = ressult.all()
+    return user_attending_events
+    
 
 
 @router.post("/register/organization/", response_model=OrganizationRead, status_code=status.HTTP_201_CREATED)

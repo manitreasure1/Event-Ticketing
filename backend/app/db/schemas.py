@@ -1,6 +1,6 @@
 from datetime import datetime
 from pydantic import BaseModel, EmailStr, ValidationError
-from typing import Optional
+from typing import Optional, List
 from datetime import datetime
 
 """
@@ -56,19 +56,16 @@ class SignUpScheme(BaseModel):
 class OrganizationBase(BaseModel):
     name: str
     email: EmailStr
-    description: str | None
+    description: str | None = None
     
 class OrganizationCreate(OrganizationBase):
     pass
 
 class OrganizationRead(OrganizationBase):
     id: int
-    name: str
-    email: str
-    description: str
     image_url: str | None = None
     created_by: str | int
-    # events: list 
+    
     
 
 """
@@ -77,26 +74,29 @@ class OrganizationRead(OrganizationBase):
 class EventBase(BaseModel):
     title: str
     description: str
-    # img_url : Optional[bytes] = None
+    img_url : Optional[bytes] = None
     ticket_price: float
     available_tickets: int
     venue: Optional[str] = None
     address: Optional[str] = None
     start_date: datetime
     end_date: datetime
-
-
-    
+    # total_tickets: int
+  
 class EventCreate(EventBase):
     organization_id: int
+    
 
-
-
-class EventRead(EventBase):
-    id: int
-    organization_id: int
+class EventRead(BaseModel):
+    new_event: dict | tuple
+    message: str
     model_config = {'extra':'forbid'}
 
+
+# class EventReadOrg(EventBase):
+#     id: int
+#     name: str
+#     organization_id: int
 
 
 
@@ -134,19 +134,28 @@ class AdminPublic(AdminBase):
 #  todo : ticket schemas 
 """
 class TicketBase(BaseModel):
-    eventId: int | str
+    event_id: int 
     email: EmailStr
     tel: str | int
-    paymentMethod: int | str
+    payment_method: int | str
+
 
 class PurchaseTicket(TicketBase):
-    cardNumber: int | str
-    cardHolderName: str
-    expiryDate: str | datetime
+    card_number: int | str
+    card_holder_name: str
+    expiry_date: str | datetime
     cvv: int | str
     model_config={'extra': 'forbid'}
 
+    
+
+    # multiple
+# class OrganizationWithEventsRead(BaseModel):
+#     organization: OrganizationRead
+#     events: List[EventReadOrg] = []
+
 try:
+    # OrganizationWithEventsRead() 
     EventCreate()  # type: ignore
     PurchaseTicket() # type: ignore
 except ValidationError as exc:

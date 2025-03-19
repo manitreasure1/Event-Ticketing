@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
-import axios from 'axios'
 import DataTable from "../data-table";
+import api from '../../../api'
 
 function EventApi() {
     const [loading, setLoading] = useState(true);
@@ -8,7 +8,7 @@ function EventApi() {
 
     const fetchEvents = async () => {
         setLoading(true)
-        await axios.get('http://127.0.0.1:8000/events/v1/')
+        await api.get('/events/v1/')
         .then(response=>{
             try{
                 setEventData(response.data)

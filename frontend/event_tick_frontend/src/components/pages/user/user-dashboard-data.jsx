@@ -36,7 +36,7 @@ export function UserDashboardData({lable1, lable1Data, lable2, lable2Data, lable
 export const OrganizationTableData = ({orgData}) =>{
   const [selectedorg, SetSelectedorg] = useState(null);
   const [showOrgForm, SetShowOrgForm] = useState(false);
-
+  
   const handleClick = ()=>{
     SetShowOrgForm(!showOrgForm)
   }
@@ -64,21 +64,55 @@ export const OrganizationTableData = ({orgData}) =>{
 
 
 export const EventTableData =({tableData})=>{
+
+  const currentDateTime = new Date();
+  const getStatus = (start_date, end_date) => {
+    const startDate = new Date(start_date);
+    const endDate = new Date(end_date);
+
+    return currentDateTime > endDate
+            ? "past"
+            : currentDateTime < startDate
+                ? "upcoming"
+                : "ongoing";
+    };
+    const getStyle = (status) => {
+      switch (status) {
+          case "ongoing":
+              return { color: "green", fontWeight: "bold" }; // Green for ongoing
+          case "upcoming":
+              return { color: "blue", fontWeight: "bold" }; // Blue for upcoming
+          case "past":
+              return { color: "red", fontWeight: "bold" }; // Red for past
+          default:
+              return {};
+      }
+  };
+
     return (
         <>
         {
           
-          tableData.map((data)=>(
+          tableData.map((data)=>{
+            const status = getStatus(data.start_date, data.end_date);
+            return(
           <tr key={data.id}>
-                <td>{data.event}</td>
-                <td>{data.attendeeType}</td>
-                <td>{data.starts}</td>
-                <td>{data.ends}</td>
-                <td>{data.day}</td>
-                <td>{data.booked}</td>
-                <td>{data.status}</td>
+                <td style={{display:"inline-flex"}}>
+                  <img style={{borderRadius:"50%"}} src={data.image_urls || "/event.png"}
+                   alt="event-image"  width={50} height={50}/>
+                  <span style={{margin: "10px"}}>{data.name.substring(0, 7)}...</span>
+                </td>
+                <td>{data.venue}</td>
+                <td>{data.start_date}</td>
+                <td>{data.end_data}</td>
+                <td>{new Date().getDay(data.start_date) - new Date().getDay(data.end_data)}</td>
+                <td className='material-symbols-outlined'>{data.organization_id ? <b>check_circle</b> : <b>cancel</b>}</td>
+                <td style={getStyle(status)}>{status}</td>
             </tr>   
-          ))
+            )
+           
+            
+})
         }
         </>
     )
@@ -108,6 +142,7 @@ const OrgCard = ({org, onorgClick})=>{
   return(
     <>
       <div className={styles.org__card} onClick={()=> onorgClick(org)}>
+        <div className={styles.org__card_cover}>
         <h3>{org.name}</h3>
         <img src={org.image_url} alt="org-img"/>
         <div className={styles.org__card_bottom}>
@@ -119,6 +154,7 @@ const OrgCard = ({org, onorgClick})=>{
             <b>Events: </b>
             <span>{org.events ? org.events.length : 0}</span>
           </div>
+        </div>
         </div>
       </div>
     </>
