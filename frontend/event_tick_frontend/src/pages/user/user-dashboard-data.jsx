@@ -4,8 +4,8 @@ import styles from './user.module.css'
 
 
 import PropTypes from 'prop-types';
-import CreateEvent from '../event/create-event';
-import RegisterOrg from '../organization/register-org';
+import CreateEvent from '../../components/forms/create-event'
+import RegisterOrg from '../../components/forms/register-org';
 
 export function UserDashboardData({lable1, lable1Data, lable2, lable2Data, lable3, lable3Data,lable4, lable4Data, }) {
   return (

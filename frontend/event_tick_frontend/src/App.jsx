@@ -1,17 +1,16 @@
 import './App.css'
-import EventCard from './components/pages/event/event-card'
-// import AdminApi from './components/utils/admin/admin-api'
-
 import { Routes, Route, useLocation} from 'react-router-dom'
-
-import Discover from './components/extra/discover'
-import Live from './components/extra/live'
-import Navbar from './components/partial/navbar'
-import Footer from './components/partial/footer'
-import UserDashboard from './components/pages/user/user-dashboard'
-// import EventApi from './components/utils/events/event-api'
 import { useEffect, useState } from 'react'
 import api from './api'
+
+
+import Navbar from './components/partial/navbar'
+import EventCard from './components/forms/event-card'
+import Footer from './components/partial/footer'
+
+import Discover from './pages/extra/discover'
+import Live from './pages/extra/live'
+import UserDashboard from './utils/users/user-dashboard'
 
 
 
@@ -39,7 +38,7 @@ function App() {
   useEffect(()=>{
     getEvents()
   }, [])
-
+// <Navbar isLogin={isToken}/>
   return (
     <>
         {!isDashboardRoute && <Navbar isLogin={isToken}/>}

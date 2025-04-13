@@ -1,8 +1,8 @@
 
 import { Link, Route, Routes} from 'react-router-dom';
-import styles from './user.module.css'
-import {UserDashboardData, EventTableData, OrganizationTableData } from './user-dashboard-data';
-import api from '../../../api';
+import styles from '../../pages/user/user.module.css'
+import {UserDashboardData, EventTableData, OrganizationTableData } from '../../pages/user/user-dashboard-data';
+import api from '../../api';
 import { useEffect, useState } from 'react';
 
 

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import Sidenav from './sidenav';
 import { useState } from 'react';
 import PropTypes from 'prop-types'
-import UserForm from '../pages/user/form'
+import UserForm from './../forms/form'
 
 
 

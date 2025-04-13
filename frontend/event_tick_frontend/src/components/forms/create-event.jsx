@@ -1,8 +1,8 @@
 
 import { useState } from 'react'
-import  './create-event.css'
+import  '../../pages/event/create-event.css'
 import PropTypes from 'prop-types'
-import api from '../../../api'
+import api from '../../api'
 export default function CreateEvent({onClose, orgId}) {
     
     const [eventForm, setEventForm] = useState({

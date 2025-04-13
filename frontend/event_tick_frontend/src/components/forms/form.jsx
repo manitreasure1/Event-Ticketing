@@ -1,9 +1,11 @@
 
 import { useState } from "react"
-import styles from './user.module.css'
+import styles from '../../pages/user/user.module.css'
 
 import PropTypes from 'prop-types'
-import api from "../../../api"
+import api from "../../api"
+
+
 export default function UserForm({onClose}){
 
     const [isSignUp, setIsSingUp] = useState(false)

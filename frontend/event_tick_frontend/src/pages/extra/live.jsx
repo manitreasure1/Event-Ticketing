@@ -1,6 +1,6 @@
 import './extra.css'
 
-import LiveEvent from "../utils/live/live-event";
+import LiveEvent from "../../utils/live/live-event";
 
 export default function Live(){
 

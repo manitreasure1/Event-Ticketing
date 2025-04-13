@@ -1,7 +1,7 @@
-import './create-event.css';
+import '../../pages/event/create-event.css';
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import api from '../../../api';
+import api from '../../api';
 
 function PaymentMethod({ onPaymentSelect, onPaymentDetailsChange }) {
   const [selectedPayment, setSelectedPayment] = useState(null);

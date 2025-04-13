@@ -1,6 +1,7 @@
 
-import Highlights from '../utils/discovery/highlights';
-import LeaguesCard from '../utils/discovery/leagues';
+
+import Highlights from '../../utils/discovery/highlights'
+import LeaguesCard from '../../utils/discovery/leagues';
 import './extra.css'
 
 
