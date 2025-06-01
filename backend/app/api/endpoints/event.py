@@ -27,8 +27,9 @@ async def remove_event(event_id: int, session: AsyncSession = Depends(get_sessio
 
 # todo
 @router.get("/{event_id}/attendees/")
-def get_event_attendees():
-    pass
+def get_event_attendees(event_id: int, session: AsyncSession = Depends(get_session)):
+    get_attendees = event_service.get_attendees(event_id, session)
+    return get_attendees
 
 
 # todo

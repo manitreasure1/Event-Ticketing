@@ -1,5 +1,5 @@
 from sqlmodel.ext.asyncio.session import AsyncSession
-from app.db.models import Event, Organization
+from app.db.models import Event, EventAttendance, Organization
 from sqlmodel import select
 from fastapi import HTTPException, status
 from app.db.schemas import EventCreate
@@ -45,10 +45,16 @@ class EventService:
         await session.refresh(new_event)
         return new_event
     
+    async def get_attendees(self, event_id: int, session: AsyncSession):
+        query = await session.exec(select(EventAttendance).where(EventAttendance.event_id == event_id))
+        if not query:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='No event Found')
+        return query.all()
 
+        pass
     # ! Not fully implemented
     async def remove_event(self, event_id: int, session: AsyncSession):
         event = await self.get_event(event_id, session)
         await session.delete(event)
         await session.commit()
-        return status.HTTP_200_OK
+        return status.HTTP_204_NO_CONTENT

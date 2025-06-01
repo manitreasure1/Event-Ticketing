@@ -21,9 +21,6 @@ async def admin_dashboard(session: AsyncSession = Depends(get_session)):
     return dashboard_data
     
     
-
-    
-    
 @router.get("/users/{user_id}")
 async def get_user(user_id:int, session: AsyncSession =Depends(get_session)):
     user = await session.get(UserDb, user_id)

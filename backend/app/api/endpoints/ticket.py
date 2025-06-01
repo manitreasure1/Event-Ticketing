@@ -16,7 +16,6 @@ ticketservice= TicketService()
 async def get_tickets():
     pass
 
-
 @router.post("/purchase/")
 async def purchase_ticket(*,
                      ticket_data: Annotated[PurchaseTicket, Form()],

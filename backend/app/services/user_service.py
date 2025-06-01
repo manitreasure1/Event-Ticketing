@@ -5,6 +5,7 @@ from app.db.schemas import  UserUpdate
 from typing import Any
 from fastapi import HTTPException, status
 
+
 class UserService:
     async def get_user_by_email(self, user_email: str, session: AsyncSession):
         user = await session.exec(select(UserDb).where(col(UserDb.email) == user_email))
@@ -18,7 +19,7 @@ class UserService:
     
     
     async def update_user(self, data: UserUpdate,
-                        session: AsyncSession ,
+                        session: AsyncSession,
                         current_user : Any
                         ):
         userdb = await self.get_user_by_email(current_user.email, session)
@@ -35,6 +36,10 @@ class UserService:
 
         
     # todo : delete current user
-    def remove_user(self):
-        pass
-
+    async def remove_user(self, current_user : Any, session: AsyncSession):
+        userdb = await self.get_user_by_email(current_user.email, session)
+        if not userdb:
+            raise HTTPException(status.HTTP_404_NOT_FOUND, detail="user not found")
+        await session.delete(userdb)
+        await session.commit()
+        return status.HTTP_204_NO_CONTENT

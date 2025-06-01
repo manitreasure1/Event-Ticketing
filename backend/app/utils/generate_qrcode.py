@@ -36,7 +36,7 @@ class Qrcode:
         print(dec_data)
         return dec_data
 
-qr_img = Qrcode()
-data = "trying the qrcode"
-gen = qr_img.generate_ticket_qrcode(data)
-qr_img.decrypt_generated_qrcode_data(gen)
+# qr_img = Qrcode()
+# data = "trying the qrcode"
+# gen = qr_img.generate_ticket_qrcode(data)
+# qr_img.decrypt_generated_qrcode_data(gen)

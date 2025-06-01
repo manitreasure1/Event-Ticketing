@@ -14,7 +14,7 @@ class Utils:
         self.secret_key = env_config.SECRET_KEY
         self.algorithm = env_config.ALGORITHM
         self.access_token_expire_hours = env_config.ACCESS_TOKEN_EXPIRE_HOURS
-        self.refresh_token_expire_days = env_config.REFRSH_TOKEN_EXPIRE_DAYS
+        self.refresh_token_expire_days = env_config.REFRESH_TOKEN_EXPIRE_DAYS
 
     def hash_password(self, password: str) -> str:
         return pwd_context.hash(password)
@@ -45,7 +45,7 @@ class Utils:
             raise ValueError("Token has expired. Please login again.") 
         except jwt.InvalidTokenError:
             raise ValueError("Invalid token")
-        
-    
 
-    
+
+
+

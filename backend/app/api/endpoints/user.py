@@ -16,7 +16,7 @@ organization_service = OrganizationService()
 
 
 @router.get("/me")
-def current_user(user = Depends(get_current_user)):
+async def current_user(user = Depends(get_current_user)):
     return user
 
 
